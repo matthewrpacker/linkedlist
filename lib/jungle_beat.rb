@@ -2,26 +2,34 @@ require_relative 'linked_list'
 
 class JungleBeat
   attr_reader :list
+  attr_accessor :rate, :voice
 
   def initialize
     @list = LinkedList.new
+    reset_rate
+    reset_voice
   end
 
-  def append(data_string)
-    data_array = data_string.split
-    data_count = data_array.count
+  def append(data)
+    data.split.each { |d| @list.append(d) }
+    data
+  end
 
-    if empty?
-      @head = Node.new(data_array.shift)
-    end
+  def count
+    @list.count
+  end
 
-    current_node = tail
+  def reset_rate
+    @rate = 500
+  end
 
-    data_array.each do |data|
-      current_node.next_node = Node.new(data)
-      current_node = current_node.next_node
-    end
+  def reset_voice
+    @voice = 'Boing'
+  end
 
-    data_count
+  def play
+    beats = @list.to_string
+    `say -r #{@rate} -v #{@voice} #{beats}`
+    count
   end
 end
